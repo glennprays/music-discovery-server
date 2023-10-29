@@ -1,17 +1,18 @@
-from app import app
+# from app import app
 import os
 from flask import jsonify
 import uuid
 
-AUDIO_DIRECTORY="../../../.data/audio"
-app.config["AUDIO_DIRECTORY"] = AUDIO_DIRECTORY
+AUDIO_DIRECTORY="./.data/audio"
 
 class AudioUseCase():
 
     def __ensure_audio_dir(self):
-        audio_dir = app.config["AUDIO_DIRECTORY"]
+        audio_dir = AUDIO_DIRECTORY
         if not os.path.exists(audio_dir):
             os.makedirs(audio_dir)
+
+        print("masuk buat", os.path.exists(audio_dir))
 
     def __save_to_dir(self, file):
         self.__ensure_audio_dir()
@@ -20,7 +21,7 @@ class AudioUseCase():
             return "Invalid file format", 400
         
         unique_filename = str(uuid.uuid4())
-        file.save(os.path.join(app.config['AUDIO_DIRECTORY'], unique_filename))
+        file.save(os.path.join(AUDIO_DIRECTORY, unique_filename))
         return unique_filename, 200
 
     def process_audio(self, file):
