@@ -5,6 +5,7 @@ import uuid
 import librosa
 import soundfile as sf
 import numpy as np 
+from .speech_to_text import speech_to_text
 
 AUDIO_RAW_DIRECTORY="./.data/audio/raw"
 AUDIO_CLEANED_DIRECTORY="./.data/audio/cleaned"
@@ -60,6 +61,8 @@ class AudioUseCase():
         sf.write(output_foreground, y_foreground, sr)
         sf.write(output_background, y_background, sr)
 
+        return output_foreground
+
 
 
     def process_audio(self, file):
@@ -69,6 +72,7 @@ class AudioUseCase():
         if not status_code == 200:
             return jsonify({"error": result}), status_code
         
-        self.__voice_separator(result, AUDIO_RAW_DIRECTORY, AUDIO_CLEANED_DIRECTORY, AUDIO_BACKGROUND_DIRECTORY)
-        return jsonify({"filename": result}), status_code
+        # filename = self.__voice_separator(result, AUDIO_RAW_DIRECTORY, AUDIO_CLEANED_DIRECTORY, AUDIO_BACKGROUND_DIRECTORY)
+        response = speech_to_text(os.path.join(AUDIO_RAW_DIRECTORY, result))
+        return jsonify({"filename": result, "response": response}), status_code
     
