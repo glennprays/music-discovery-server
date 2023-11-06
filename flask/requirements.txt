@@ -3,3 +3,4 @@ gunicorn==21.2.0
 librosa==0.10.1
 soundfile==0.12.1
 google-cloud-speech==2.21.1
+scipy==1.11.3
