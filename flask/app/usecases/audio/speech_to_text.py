@@ -18,12 +18,12 @@ def speech_to_text(filename):
 
     config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-        sample_rate_hertz=44100,
+        enable_automatic_punctuation=True,
         language_code="en-US",
+        sample_rate_hertz=22050,
     )
 
-    operation = client.long_running_recognize(config=config, audio=audio) #asynchronous
-    response = operation.result(timeout=10000)
+    response = client.recognize(request={"config": config, "audio": audio})
 
     print('berhasil selesai')
     print(response)

@@ -3,6 +3,7 @@ import os
 from flask import jsonify
 import uuid
 import librosa
+from librosa.effects import preemphasis
 import soundfile as sf
 import numpy as np 
 from .speech_to_text import speech_to_text
@@ -22,8 +23,10 @@ class AudioUseCase():
             os.makedirs(AUDIO_BACKGROUND_DIRECTORY)
 
     def __save_to_dir(self, file):
+        print(file)
         self.__ensure_audio_dir()
-        allowed_extensions = {"mp3", "wav", "ogg"}
+        allowed_extensions = {"wav"}
+        print(file, 'done')
         
         original_filename = file.filename
         filename, file_extension = os.path.splitext(original_filename)
@@ -53,8 +56,12 @@ class AudioUseCase():
         S_foreground = mask_v * S_full
         S_background = mask_i * S_full
 
+        # y_foreground = librosa.effects.preemphasis(phase, coef=0.97)
+
         y_foreground = librosa.istft(S_foreground * phase)
         y_background = librosa.istft(S_background * phase)
+
+        # y_foreground = librosa.effects.preemphasis(y_foreground, coef=0.97)
 
         output_foreground = os.path.join(output_foreground, filename)
         output_background = os.path.join(output_background, filename)
@@ -67,12 +74,14 @@ class AudioUseCase():
 
     def process_audio(self, file):
         # save audio into directory
+        print("sebelum")
         result, status_code = self.__save_to_dir(file)
+        print("saved")
 
         if not status_code == 200:
             return jsonify({"error": result}), status_code
         
-        # filename = self.__voice_separator(result, AUDIO_RAW_DIRECTORY, AUDIO_CLEANED_DIRECTORY, AUDIO_BACKGROUND_DIRECTORY)
-        response = speech_to_text(os.path.join(AUDIO_RAW_DIRECTORY, result))
+        filename = self.__voice_separator(result, AUDIO_RAW_DIRECTORY, AUDIO_CLEANED_DIRECTORY, AUDIO_BACKGROUND_DIRECTORY)
+        response = speech_to_text(filename)
         return jsonify({"filename": result, "response": response}), status_code
     

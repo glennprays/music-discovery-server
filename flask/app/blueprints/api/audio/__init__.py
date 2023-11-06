@@ -7,6 +7,7 @@ audio_uc = AudioUseCase()
 
 @bp.route("/", methods=["POST"])
 def process_audio():
+    print(request.files, 'masuk')
     if "audio" not in request.files:
         return jsonify({"error": "No file part"}), 400
     
