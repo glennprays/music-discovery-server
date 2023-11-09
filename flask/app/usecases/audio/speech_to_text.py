@@ -1,32 +1,19 @@
-from google.cloud import speech
-import io
-import os
-from flask import jsonify
+import speech_recognition as sr
 
 def speech_to_text(filename):
-    print(filename)
-    print('berhasil masuk')
+    recognizer = sr.Recognizer()
 
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS']= './gcp/key.json'
-    client = speech.SpeechClient()
-
-    transcript = '*'
-
-    with io.open(filename, "rb") as audio_file:
-        content = audio_file.read()
-        audio = speech.RecognitionAudio(content=content)
-
-    config = speech.RecognitionConfig(
-        encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-        language_code="en-US",
-        sample_rate_hertz=22050,
-    )
-
-    response = client.recognize(request={"config": config, "audio": audio})
-
-    print('berhasil selesai')
-    print(response)
-    for result in response.results:
-        transcript += result.alternatives[0].transcript
+    with sr.AudioFile(filename) as source:
+        audio = recognizer.record(source)
     
-    return transcript
+    try:
+    # Use the Google Web Speech API recognizer
+        text = recognizer.recognize_google(audio, with_confidence=True)
+        # print("Google Web Speech API recognized: " + text)
+        print(text)
+        return text
+    except sr.UnknownValueError:
+        return "Google Web Speech API could not understand the audio"
+    except sr.RequestError as e:
+        print(f"Could not request results from Google Web Speech API; {e}")
+        return (f"Could not request results from Google Web Speech API; {e}")
