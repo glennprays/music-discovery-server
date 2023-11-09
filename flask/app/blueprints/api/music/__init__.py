@@ -1,11 +1,11 @@
 from flask import Blueprint, request, jsonify
 from app.usecases.audio import AudioUseCase
 
-bp = Blueprint("audio", __name__, url_prefix="/audio")
+bp = Blueprint("audio", __name__, url_prefix="/music")
 
 audio_uc = AudioUseCase()
 
-@bp.route("/", methods=["POST"])
+@bp.route("/search", methods=["POST"])
 def process_audio():
     print(request.files, 'masuk')
     if "audio" not in request.files:

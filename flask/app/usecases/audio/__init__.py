@@ -14,6 +14,8 @@ from scipy import signal
 from pydub import AudioSegment
 from pydub.playback import play
 
+from .youtube_music import search_music
+
 AUDIO_RAW_DIRECTORY = "./.data/audio/raw"
 AUDIO_CLEANED_DIRECTORY = "./.data/audio/cleaned"
 AUDIO_BACKGROUND_DIRECTORY = "./.data/audio/background"
@@ -107,5 +109,9 @@ class AudioUseCase:
             AUDIO_BACKGROUND_DIRECTORY,
         )
         filename = self.__enhance_audio(filename)
-        response = speech_to_text(filename)
-        return jsonify({"filename": result, "response": response}), status_code
+        text, confidence = speech_to_text(filename)
+        if confidence is None:
+            return jsonify({"error": text}), 404
+        
+        search_result = search_music(text)[0]
+        return jsonify({"filename": result, "lyrics": text, "search_result": search_result}), status_code
