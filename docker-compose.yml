@@ -12,6 +12,17 @@ services:
     expose:
       - 8080
 
+  next:
+    build: ./next
+    container_name: next
+    restart: always
+    environment:
+     APP_NAME: music-discovery-ui
+    volumes:
+      - ./next:/app
+    expose:
+      - 3000
+
   nginx:
     build: ./nginx
     container_name: nginx
