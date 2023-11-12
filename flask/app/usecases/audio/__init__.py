@@ -3,16 +3,13 @@ import os
 from flask import jsonify
 import uuid
 import librosa
-from librosa.effects import preemphasis
 import soundfile as sf
 import numpy as np
 from .speech_to_text import speech_to_text
 
 import librosa
-from scipy import signal
 
 from pydub import AudioSegment
-from pydub.playback import play
 
 from .youtube_music import search_music
 

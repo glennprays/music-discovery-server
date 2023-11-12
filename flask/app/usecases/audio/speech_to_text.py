@@ -7,7 +7,6 @@ def speech_to_text(filename):
         audio = recognizer.record(source)
     
     try:
-    # Use the Google Web Speech API recognizer
         response = recognizer.recognize_google(audio, with_confidence=True)
         return response[0], response[1]
     except sr.UnknownValueError:
