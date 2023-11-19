@@ -6,3 +6,5 @@ SpeechRecognition==3.10.0
 ytmusicapi==1.3.2
 numpy
 pydub==0.25.1
+moviepy==1.0.3
+ffmpeg-python==0.2.0

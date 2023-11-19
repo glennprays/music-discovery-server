@@ -4,6 +4,8 @@ RUN pip install --upgrade pip
 
 RUN pip install --upgrade setuptools wheel
 
+RUN apt-get update && apt-get install -y ffmpeg
+
 WORKDIR /app
 
 ADD . /app/
