@@ -7,8 +7,6 @@ services:
     restart: always
     environment:
      APP_NAME: music-discovery-api
-    volumes:
-      - ./flask:/app
     expose:
       - 8080
 
@@ -18,8 +16,6 @@ services:
     restart: always
     environment:
      APP_NAME: music-discovery-ui
-    volumes:
-      - ./next:/app
     expose:
       - 3000
 
@@ -27,5 +23,10 @@ services:
     build: ./nginx
     container_name: nginx
     restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - /etc/letsencrypt/live/dengerin.glennprays.tech/fullchain.pem:/etc/nginx/certs/fullchain.pem
+      - /etc/letsencrypt/live/dengerin.glennprays.tech/privkey.pem:/etc/nginx/certs/privkey.pem
     ports:
       - 80:80
+      - 443:443
