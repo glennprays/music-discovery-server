@@ -1,3 +1,4 @@
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 # Music Discovery
 Introducing a Music Discovery Web Application (API and user-friendly interface). The platform is enhanced with Google API integration for song detection.
 
